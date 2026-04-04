@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:blog.fabric.microsoft.com)",
+      "WebFetch(domain:techcommunity.microsoft.com)",
+      "WebSearch",
+      "WebFetch(domain:justinjbird.com)"
+    ]
+  }
+}

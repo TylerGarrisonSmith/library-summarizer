@@ -1,2 +1,28 @@
+# Secrets & credentials
 resource-summarizer-8b243a5a648a.json
+*.json.key
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# uv
+uv.lock
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ruff
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
