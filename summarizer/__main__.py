@@ -14,7 +14,7 @@ def main() -> None:
     bq_client = bigquery.Client(project=config.GCP_PROJECT_ID)
     ensure_table(bq_client, config.BIGQUERY_DATASET, config.BIGQUERY_TABLE)
 
-    model = init_model(config.GCP_PROJECT_ID, config.VERTEX_AI_REGION, config.GEMINI_MODEL)
+    ai_client = init_model(config.GCP_PROJECT_ID, config.VERTEX_AI_REGION, config.GEMINI_MODEL)
 
     items = fetch_feed(config.FEED_URL, config.LOOKBACK_DAYS)
     print(f"Fetched {len(items)} item(s) within {config.LOOKBACK_DAYS}-day lookback window")
@@ -31,7 +31,7 @@ def main() -> None:
         text = fetch_article_text(item["source_url"], config.MAX_TEXT_CHARS)
 
         print(f"  Summarizing: {item['title']}")
-        summary = summarize(model, text, item["title"])
+        summary = summarize(ai_client, config.GEMINI_MODEL, text, item["title"])
 
         rows.append({
             "content_id": item["content_id"],
