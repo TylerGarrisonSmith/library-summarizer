@@ -7,6 +7,7 @@ from . import config
 from .ai import init_model, summarize
 from .bq import ensure_table, get_existing_ids, write_rows
 from .feed import fetch_feed
+from .listing import fetch_listing
 from .scraper import fetch_article_text
 
 
@@ -17,6 +18,8 @@ def main() -> None:
     ai_client = init_model(config.GCP_PROJECT_ID, config.VERTEX_AI_REGION, config.GEMINI_MODEL)
 
     items = fetch_feed(config.FEED_URL, config.LOOKBACK_DAYS)
+    for listing_url in config.LISTING_URLS:
+        items += fetch_listing(listing_url, config.LOOKBACK_DAYS)
     print(f"Fetched {len(items)} item(s) within {config.LOOKBACK_DAYS}-day lookback window")
 
     existing_ids = get_existing_ids(bq_client, config.BIGQUERY_DATASET, config.BIGQUERY_TABLE)

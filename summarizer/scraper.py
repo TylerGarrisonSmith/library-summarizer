@@ -15,7 +15,8 @@ def fetch_article_text(url: str, max_chars: int) -> str:
 
     # Try progressively broader selectors for the main content block
     main = (
-        soup.find("div", class_="entry-content")
+        soup.find("div", class_="u-rich-text-blog")
+        or soup.find("div", class_="entry-content")
         or soup.find("article")
         or soup.find("main")
         or soup.body
