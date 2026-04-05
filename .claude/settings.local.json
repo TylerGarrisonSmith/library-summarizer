@@ -4,7 +4,9 @@
       "WebFetch(domain:blog.fabric.microsoft.com)",
       "WebFetch(domain:techcommunity.microsoft.com)",
       "WebSearch",
-      "WebFetch(domain:justinjbird.com)"
+      "WebFetch(domain:justinjbird.com)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:claude.com)"
     ]
   }
 }
