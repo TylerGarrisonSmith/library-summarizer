@@ -3,6 +3,7 @@ set -euo pipefail
 
 # --- config ---
 IMAGE_NAME="library-summarizer"
+ARTIFACT_REPO="summarizer-repo"
 JOB_NAME="library-summarizer"
 REGION="us-central1"
 
@@ -22,7 +23,7 @@ if [ -z "$GCP_PROJECT_ID" ]; then
   exit 1
 fi
 
-IMAGE="$REGION-docker.pkg.dev/$GCP_PROJECT_ID/$IMAGE_NAME/$IMAGE_NAME:latest"
+IMAGE="$REGION-docker.pkg.dev/$GCP_PROJECT_ID/$ARTIFACT_REPO/$IMAGE_NAME:latest"
 
 # --- build & push via Cloud Build ---
 echo "Building and pushing image via Cloud Build..."
@@ -37,6 +38,7 @@ if gcloud run jobs describe "$JOB_NAME" --region "$REGION" --project "$GCP_PROJE
     --image "$IMAGE" \
     --region "$REGION" \
     --project "$GCP_PROJECT_ID" \
+    --max-retries 1 \
     $(echo "$ENV_VARS")
 else
   echo "Creating Cloud Run job..."
@@ -44,6 +46,7 @@ else
     --image "$IMAGE" \
     --region "$REGION" \
     --project "$GCP_PROJECT_ID" \
+    --max-retries 1 \
     $(echo "$ENV_VARS")
 fi
 
