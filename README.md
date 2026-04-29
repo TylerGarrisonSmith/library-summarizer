@@ -48,42 +48,31 @@ uv run python -m summarizer
 
 ## Deployment (Cloud Run)
 
-**Prerequisites:** `gcloud` CLI installed and authenticated, APIs enabled for Cloud Run, Artifact Registry, Cloud Build, and Cloud Scheduler.
+**Prerequisites:** `gcloud` CLI installed and authenticated, Docker running, APIs enabled for Cloud Run, Artifact Registry, and Cloud Scheduler.
 
-**1. Build and push the image:**
-
-```bash
-gcloud builds submit --tag us-central1-docker.pkg.dev/YOUR_PROJECT/summarizer-repo/summarizer
-```
-
-**2. Create the Cloud Run Job:**
+**1. Deploy:**
 
 ```bash
-gcloud run jobs create summarizer \
-  --image=us-central1-docker.pkg.dev/YOUR_PROJECT/summarizer-repo/summarizer \
-  --region=us-central1 \
-  --task-timeout=600 \
-  --service-account=YOUR_SERVICE_ACCOUNT@YOUR_PROJECT.iam.gserviceaccount.com \
-  --set-env-vars="GCP_PROJECT_ID=YOUR_PROJECT,BIGQUERY_DATASET=YOUR_DATASET,BIGQUERY_TABLE=YOUR_TABLE"
+bash deploy.sh
 ```
 
-The job uses the attached service account for authentication — no credentials file needed on Cloud Run.
+`deploy.sh` reads your `.env`, builds and pushes the Docker image to Artifact Registry, and creates or updates the Cloud Run job with the correct environment variables. `GOOGLE_APPLICATION_CREDENTIALS` is excluded — on Cloud Run, auth is handled by the job's service account.
 
-**3. Schedule it:**
+**2. Schedule it:**
 
 ```bash
 gcloud scheduler jobs create http summarizer-schedule \
   --schedule="0 8 * * *" \
-  --uri="https://us-central1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/YOUR_PROJECT/jobs/summarizer:run" \
+  --uri="https://us-central1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/resource-summarizer/jobs/library-summarizer:run" \
   --message-body="{}" \
-  --oauth-service-account-email=YOUR_SERVICE_ACCOUNT@YOUR_PROJECT.iam.gserviceaccount.com \
+  --oauth-service-account-email=YOUR_SERVICE_ACCOUNT@resource-summarizer.iam.gserviceaccount.com \
   --location=us-central1
 ```
 
 **Run manually:**
 
 ```bash
-gcloud run jobs execute summarizer --region=us-central1
+gcloud run jobs execute library-summarizer --region=us-central1 --project=resource-summarizer
 ```
 
 ## Development
