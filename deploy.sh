@@ -24,12 +24,11 @@ fi
 
 IMAGE="$REGION-docker.pkg.dev/$GCP_PROJECT_ID/$IMAGE_NAME/$IMAGE_NAME:latest"
 
-# --- build & push ---
-echo "Building image..."
-docker build -t "$IMAGE" .
-
-echo "Pushing image..."
-docker push "$IMAGE"
+# --- build & push via Cloud Build ---
+echo "Building and pushing image via Cloud Build..."
+gcloud builds submit \
+  --tag "$IMAGE" \
+  --project "$GCP_PROJECT_ID"
 
 # --- create or update job ---
 if gcloud run jobs describe "$JOB_NAME" --region "$REGION" --project "$GCP_PROJECT_ID" &>/dev/null; then

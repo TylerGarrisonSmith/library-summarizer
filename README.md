@@ -48,7 +48,7 @@ uv run python -m summarizer
 
 ## Deployment (Cloud Run)
 
-**Prerequisites:** `gcloud` CLI installed and authenticated, Docker running, APIs enabled for Cloud Run, Artifact Registry, and Cloud Scheduler.
+**Prerequisites:** `gcloud` CLI installed and authenticated, APIs enabled for Cloud Run, Artifact Registry, Cloud Build, and Cloud Scheduler.
 
 **1. Deploy:**
 
